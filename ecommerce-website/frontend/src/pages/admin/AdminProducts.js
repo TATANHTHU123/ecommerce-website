@@ -1,4 +1,4 @@
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState, memo, useCallback } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -95,7 +95,7 @@ const AdminProducts = () => {
   const token = localStorage.getItem("token");
 
   // Lấy toàn bộ sản phẩm
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/products");
       const allProducts = res.data || [];
@@ -107,7 +107,8 @@ const AdminProducts = () => {
       setProducts([]);
       setTotalPages(1);
     }
-  };
+  }, [page]);
+  
   // Lấy category
   const fetchCategories = async () => {
     try {
@@ -121,7 +122,7 @@ const AdminProducts = () => {
   useEffect(() => {
     fetchProducts();
     fetchCategories();
-  }, [page]);
+  }, [page, fetchProducts]);
 
 
 
