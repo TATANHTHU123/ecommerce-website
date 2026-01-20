@@ -1,39 +1,37 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const orderSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true
+      required: true,
     },
     items: [
       {
         productId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Product"
+          ref: "Product",
         },
         name: String,
         price: Number,
         qty: Number,
-        image: String
-      }
+        image: String,
+      },
     ],
-
     customer: {
       name: String,
       phone: String,
-      address: String
+      address: String,
     },
-
     total: Number,
-
     status: {
       type: String,
-      default: "Đang xử lý"
-    }
+      default: "Đang xử lý",
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Order", orderSchema);
+const Order = mongoose.model("Order", orderSchema);
+export default Order;
