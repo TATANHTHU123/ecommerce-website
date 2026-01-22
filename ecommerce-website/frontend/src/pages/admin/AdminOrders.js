@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+const API_URL = "https://ecommerce-website-10.onrender.com";
+
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
   const [statusFilter, setStatusFilter] = useState("All");
@@ -10,7 +12,7 @@ const AdminOrders = () => {
 
   const fetchOrders = async () => {
     const token = localStorage.getItem("token");
-    const res = await axios.get("http://localhost:5000/api/admin/orders", {
+    const res = await axios.get(`${API_URL}/api/admin/orders`, {
       headers: { Authorization: `Bearer ${token}` }
     });
     setOrders(res.data);
@@ -24,7 +26,7 @@ const AdminOrders = () => {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5000/api/admin/orders/${id}`,
+        `${API_URL}/api/admin/orders/${id}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -99,7 +101,7 @@ const AdminOrders = () => {
 
       <h2 style={styles.title}>📦 Danh sách đơn hàng</h2>
 
-      {/* ===== FILTER STATUS ===== */}
+      {/* FILTER */}
       <div style={{ textAlign: "center", marginBottom: 20 }}>
         <select
           className="status-select"
@@ -117,7 +119,7 @@ const AdminOrders = () => {
         </select>
       </div>
 
-      {/* ===== STATS ===== */}
+      {/* STATS */}
       <div style={styles.statsBox}>
         <div style={styles.statCard}>
           💰 Doanh thu<br />
@@ -132,7 +134,7 @@ const AdminOrders = () => {
         <div style={styles.statCard}>❌ Canceled<br />{statusCount.Canceled || 0}</div>
       </div>
 
-      {/* ===== ORDER LIST ===== */}
+      {/* ORDERS */}
       {currentOrders.map(order => (
         <div key={order._id} className="order-card">
           <h3>🧾 Order ID: <span style={{ color: "#0077ff" }}>{order._id}</span></h3>
@@ -140,9 +142,7 @@ const AdminOrders = () => {
           <p>📧 {order.userId?.email}</p>
           <p>📞 {order.userId?.phone || order.customer?.phone}</p>
           <p>📍 {order.customer?.address}</p>
-          <p>
-            💰 <strong style={{ color: "#d62828" }}>{order.total} VNĐ</strong>
-          </p>
+          <p>💰 <strong style={{ color: "#d62828" }}>{order.total} VNĐ</strong></p>
           <p>🕒 {new Date(order.createdAt).toLocaleString()}</p>
 
           <select
@@ -164,27 +164,6 @@ const AdminOrders = () => {
           </ul>
         </div>
       ))}
-
-      {/* ===== PAGINATION ===== */}
-      {filteredOrders.length > 0 && (
-        <div className="pagination">
-          {[...Array(totalPages)].map((_, i) => (
-            <button
-              key={i}
-              className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
-              onClick={() => setCurrentPage(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {filteredOrders.length === 0 && (
-        <p style={{ textAlign: "center", marginTop: 40 }}>
-          Không có đơn hàng nào
-        </p>
-      )}
     </div>
   );
 };

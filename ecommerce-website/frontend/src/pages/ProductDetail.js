@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/api"; // ✅ dùng api chung
 import { CartContext } from "../context/CartContext";
 
 function ProductDetail() {
@@ -14,7 +14,7 @@ function ProductDetail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const res = await api.get(`/api/products/${id}`);
         setProduct(res.data);
       } catch (err) {
         console.error(err);
@@ -49,7 +49,7 @@ function ProductDetail() {
           src={
             product.image?.startsWith("http")
               ? product.image
-              : `http://localhost:5000${product.image}`
+              : `${api.defaults.baseURL}${product.image}`
           }
           alt={product.name}
           onError={(e) => (e.target.src = "/no-image.png")}

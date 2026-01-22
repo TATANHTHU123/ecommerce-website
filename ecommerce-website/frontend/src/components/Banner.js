@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API_URL = "https://ecommerce-website-10.onrender.com";
+
 export default function Banner() {
   const [banners, setBanners] = useState([]);
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/banners")
-      .then(res => setBanners(res.data));
+      .get(`${API_URL}/api/banners`)
+      .then(res => setBanners(res.data))
+      .catch(console.log);
   }, []);
 
   useEffect(() => {
@@ -28,22 +31,18 @@ export default function Banner() {
           key={b._id}
           className={`vip-banner-slide ${i === index ? "active" : ""}`}
         >
-          {/* IMAGE */}
+          {/* ✅ FIX URL ẢNH */}
           <img
-            src={`http://localhost:5000${b.image}`}
+            src={`${API_URL}${b.image}`}
             className="vip-banner-bg"
             alt="banner"
           />
 
-          {/* OVERLAY */}
           <div className="vip-overlay" />
 
-          {/* TEXT AUTO ANIMATE */}
           <div className="vip-content">
-            <h2 className="vip-title">
-              {b.title || "Những sản phẩm mới 2026"}
-            </h2>
-            <p className="vip-desc">
+            <h2>{b.title || "Những sản phẩm mới 2026"}</h2>
+            <p>
               {b.description ||
                 "Thiết kế độc đáo – Tái chế – Nguyên liệu mới"}
             </p>

@@ -2,17 +2,32 @@ import { createContext, useEffect, useState } from "react";
 
 export const WishlistContext = createContext();
 
-export const WishlistProvider = ({ children }) => {
+export const WishlistProvider = ({ children, user }) => {
   const [wishlist, setWishlist] = useState([]);
 
-  useEffect(() => {
-    const saved = localStorage.getItem("wishlist");
-    if (saved) setWishlist(JSON.parse(saved));
-  }, []);
+  const storageKey = user ? `wishlist_${user._id}` : null;
 
+  // 👉 Load wishlist theo user
   useEffect(() => {
-    localStorage.setItem("wishlist", JSON.stringify(wishlist));
-  }, [wishlist]);
+    if (!storageKey) {
+      setWishlist([]);
+      return;
+    }
+
+    const saved = localStorage.getItem(storageKey);
+    if (saved) {
+      setWishlist(JSON.parse(saved));
+    } else {
+      setWishlist([]);
+    }
+  }, [storageKey]);
+
+  // 👉 Save wishlist theo user
+  useEffect(() => {
+    if (storageKey) {
+      localStorage.setItem(storageKey, JSON.stringify(wishlist));
+    }
+  }, [wishlist, storageKey]);
 
   const toggleWishlist = (product) => {
     setWishlist(prev => {
@@ -22,10 +37,13 @@ export const WishlistProvider = ({ children }) => {
     });
   };
 
-  const isWishlisted = (id) => wishlist.some(p => p._id === id);
+  const isWishlisted = (id) =>
+    wishlist.some(p => p._id === id);
 
   return (
-    <WishlistContext.Provider value={{ wishlist, toggleWishlist, isWishlisted }}>
+    <WishlistContext.Provider
+      value={{ wishlist, toggleWishlist, isWishlisted }}
+    >
       {children}
     </WishlistContext.Provider>
   );

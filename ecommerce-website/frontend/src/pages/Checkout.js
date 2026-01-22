@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import api from "../utils/api"; // ✅ dùng backend online
 
 function Checkout() {
     const navigate = useNavigate();
@@ -30,18 +30,17 @@ function Checkout() {
 
         try {
             const orderData = {
-                //userId: user.id,
                 items: cart.map(item => ({
                     productId: item._id,
-                    //name: item.name,
-                    //price: item.price,
-                     qty: Number(item.qty) || 1
+                    qty: Number(item.qty) || 1
                 })),
                 customer
             };
 
-            await axios.post("http://localhost:5000/api/orders", orderData, {
-                headers: { Authorization: `Bearer ${token}` }
+            await api.post("/api/orders", orderData, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             });
 
             alert("Đặt hàng thành công 🎉");
@@ -64,13 +63,16 @@ function Checkout() {
 
             <h2>Thông tin giao hàng</h2>
 
-            <input placeholder="Tên"
+            <input
+                placeholder="Tên"
                 onChange={e => setCustomer({ ...customer, name: e.target.value })}
             />
-            <input placeholder="SĐT"
+            <input
+                placeholder="SĐT"
                 onChange={e => setCustomer({ ...customer, phone: e.target.value })}
             />
-            <input placeholder="Địa chỉ"
+            <input
+                placeholder="Địa chỉ"
                 onChange={e => setCustomer({ ...customer, address: e.target.value })}
             />
 

@@ -1,12 +1,20 @@
 import { Navigate } from "react-router-dom";
 
 const AdminRoute = ({ children }) => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
 
-  if (!user || user.role !== "admin") {
-    return <Navigate to="/" />;
+  // ❌ Chưa đăng nhập
+  if (!token) {
+    return <Navigate to="/login" replace />;
   }
 
+  // ❌ Không phải admin
+  if (role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
+
+  // ✅ Admin
   return children;
 };
 

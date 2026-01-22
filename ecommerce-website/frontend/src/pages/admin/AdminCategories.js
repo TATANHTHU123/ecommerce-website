@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+const API_URL = "https://ecommerce-website-10.onrender.com";
+
 const AdminCategories = () => {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
   const token = localStorage.getItem("token");
 
   const fetchCategories = async () => {
-    const res = await axios.get("http://localhost:5000/api/categories");
+    const res = await axios.get(`${API_URL}/api/categories`);
     setCategories(res.data);
   };
 
@@ -23,7 +25,7 @@ const AdminCategories = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/categories",
+        `${API_URL}/api/categories`,
         { name },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -38,7 +40,7 @@ const AdminCategories = () => {
   const deleteCategory = async (id) => {
     if (!window.confirm("Xoá category này?")) return;
 
-    await axios.delete(`http://localhost:5000/api/categories/${id}`, {
+    await axios.delete(`${API_URL}/api/categories/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     fetchCategories();

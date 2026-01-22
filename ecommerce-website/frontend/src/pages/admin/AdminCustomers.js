@@ -2,18 +2,32 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+const API_URL = "https://ecommerce-website-10.onrender.com";
+
 const AdminCustomers = () => {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
+    const role = localStorage.getItem("role");
+
+    // ⛔ Không phải admin thì KHÔNG gọi API
+    if (role !== "admin") {
+      alert("Bạn không có quyền truy cập trang này");
+      return;
+    }
+
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("Token không tồn tại");
 
-        const res = await axios.get("http://localhost:5000/api/admin/customers", {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const res = await axios.get(
+          `${API_URL}/api/admin/customers`,
+          {
+            headers: { Authorization: `Bearer ${token}` }
+          }
+        );
+
         setUsers(res.data);
       } catch (err) {
         console.error(err);
@@ -23,6 +37,7 @@ const AdminCustomers = () => {
 
     fetchUsers();
   }, []);
+
 
   return (
     <div style={styles.container}>
@@ -80,7 +95,6 @@ const AdminCustomers = () => {
           background: #1976d2;
           font-weight: 600;
         }
-          
       `}</style>
     </div>
   );

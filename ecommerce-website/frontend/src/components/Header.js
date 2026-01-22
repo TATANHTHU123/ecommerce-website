@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
-import axios from "axios";
+import api from "../utils/api"; // ⭐ dùng api chung
+
 
 function Header({ keyword, setKeyword, category, setCategory, price, setPrice }) {
   const { cart } = useContext(CartContext);
@@ -12,10 +13,10 @@ function Header({ keyword, setKeyword, category, setCategory, price, setPrice })
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/categories")
-      .then(res => setCategories(res.data));
-  }, []);
+  api
+    .get("/api/categories")
+    .then(res => setCategories(res.data));
+}, []);
 
   const logout = () => {
     localStorage.removeItem("token");

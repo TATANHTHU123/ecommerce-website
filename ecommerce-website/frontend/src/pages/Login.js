@@ -1,7 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import api from "../utils/api"; // ✅ backend online
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -13,13 +12,16 @@ function Login() {
 
     const submit = async () => {
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/login", {
+            const res = await api.post("/api/auth/login", {
                 email,
                 password
             });
 
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("user", JSON.stringify(res.data.user));
+
+            // ✅ THÊM DÒNG NÀY (QUAN TRỌNG)
+            localStorage.setItem("role", res.data.user.role);
 
             if (res.data.user.role === "admin") {
                 navigate("/admin");
@@ -28,9 +30,10 @@ function Login() {
             }
 
         } catch (err) {
-            alert(err.response.data.message);
+            alert(err.response?.data?.message || "Đăng nhập thất bại");
         }
     };
+
 
     return (
         <div className="login-page">
@@ -63,7 +66,6 @@ function Login() {
                         Đăng ký
                     </span>
                 </p>
-
             </div>
         </div>
     );

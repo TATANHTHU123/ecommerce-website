@@ -3,6 +3,7 @@ import { CartContext } from "../context/CartContext";
 import { WishlistContext } from "../context/WishlistContext";
 import { Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
+import api from "../utils/api";
 
 function ProductCard({ product }) {
   const { addToCart } = useContext(CartContext);
@@ -114,10 +115,11 @@ function ProductCard({ product }) {
               src={
                 product.image?.startsWith("http")
                   ? product.image
-                  : `http://localhost:5000${product.image}`
+                  : `${api.defaults.baseURL}${product.image}`
               }
               alt={product.name}
             />
+
           </Link>
 
           {/* ❤️ HEART ICON */}

@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";   // 👈 Thêm import
+import { Link } from "react-router-dom";
+import api from "../utils/api"; // ✅ backend online
 
 function OrderHistory() {
   const [orders, setOrders] = useState([]);
@@ -10,8 +10,9 @@ function OrderHistory() {
     if (!user) return;
 
     const fetchOrders = () => {
-      axios.get(`http://localhost:5000/api/orders/${user.id}`)
-        .then(res => setOrders(res.data));
+      api.get(`/api/orders/${user._id || user.id}`)
+        .then(res => setOrders(res.data))
+        .catch(console.log);
     };
 
     fetchOrders();
@@ -33,7 +34,7 @@ function OrderHistory() {
     <div className="order-page">
       <h2>Lịch sử đơn hàng</h2>
 
-      <Link to="/" className="btn-back-home">⬅️ Trở về trang chủ</Link>   {/* 👈 nút back */}
+      <Link to="/" className="btn-back-home">⬅️ Trở về trang chủ</Link>
 
       {orders.map(order => (
         <div className="order-card" key={order._id}>
@@ -47,7 +48,7 @@ function OrderHistory() {
                 src={
                   item.image?.startsWith("http")
                     ? item.image
-                    : `http://localhost:5000${item.image}`
+                    : `${api.defaults.baseURL}${item.image}`
                 }
                 alt={item.name}
                 onError={(e) => (e.target.src = "/no-image.png")}

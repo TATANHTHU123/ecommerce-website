@@ -1,7 +1,7 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
 import Banner from "../components/Banner";
+import api from "../utils/api"; // ✅ dùng backend online
 
 function Home({ keyword, category, price }) {
   const [products, setProducts] = useState([]);
@@ -10,8 +10,8 @@ function Home({ keyword, category, price }) {
   const productsPerPage = 8;
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/products?keyword=${keyword}`)
+    api
+      .get(`/api/products?keyword=${keyword || ""}`)
       .then(res => {
         let data = res.data;
 

@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { Link } from "react-router-dom";
+import api from "../utils/api"; // ✅ dùng backend online
 
 function Cart() {
     const { cart, setCart } = useContext(CartContext);
+    const BASE_URL = api.defaults.baseURL; // ✅ lấy baseURL backend
 
     const increase = (id) => {
         const newCart = cart.map(item =>
@@ -54,7 +56,7 @@ function Cart() {
                         src={
                             item.image?.startsWith("http")
                                 ? item.image
-                                : `http://localhost:5000${item.image}`
+                                : `${BASE_URL}${item.image}` // ✅ FIX localhost
                         }
                         alt={item.name}
                         onError={(e) => (e.target.src = "/no-image.png")}

@@ -4,14 +4,19 @@ import App from "./App";
 import { CartProvider } from "./context/CartContext";
 import "./index.css";
 import { AuthProvider } from "./context/AuthContext";
-import { WishlistProvider } from "./context/WishlistContext";
+
+import WishlistWrapper from "./WishlistWrapper"; // 👈 BẮT BUỘC PHẢI CÓ
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <WishlistProvider>
-  <AuthProvider>
-  <CartProvider>
-    <App />
-  </CartProvider>
-  </AuthProvider>
-  </WishlistProvider>
+  <React.StrictMode>
+    <AuthProvider>
+      <WishlistWrapper>
+        <CartProvider>
+          <App />
+        </CartProvider>
+      </WishlistWrapper>
+    </AuthProvider>
+  </React.StrictMode>
 );
+

@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../utils/api"; // ✅ dùng api chung
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -30,7 +30,7 @@ function Register() {
     }
 
     try {
-      await axios.post("http://localhost:5000/api/auth/register", form);
+      await api.post("/api/auth/register", form); // ✅ bỏ localhost
       alert("Đăng ký thành công 🎉");
       navigate("/login");
     } catch (err) {
