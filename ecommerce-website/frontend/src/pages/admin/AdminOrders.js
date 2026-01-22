@@ -47,7 +47,7 @@ const AdminOrders = () => {
   const lastIndex = currentPage * ordersPerPage;
   const firstIndex = lastIndex - ordersPerPage;
   const currentOrders = filteredOrders.slice(firstIndex, lastIndex);
-  //const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
+ 
 
   /* ================= STATS ================= */
   const totalOrders = orders.length;
