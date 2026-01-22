@@ -2,15 +2,13 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const API_URL = "https://ecommerce-website-10.onrender.com";
-
 const AdminBanners = () => {
   const [banners, setBanners] = useState([]);
   const [image, setImage] = useState(null);
   const token = localStorage.getItem("token");
 
   const fetchBanners = async () => {
-    const res = await axios.get(`${API_URL}/api/banners`);
+    const res = await axios.get("http://localhost:5000/api/banners");
     setBanners(res.data);
   };
 
@@ -25,7 +23,7 @@ const AdminBanners = () => {
     const formData = new FormData();
     formData.append("image", image);
 
-    await axios.post(`${API_URL}/api/banners`, formData, {
+    await axios.post("http://localhost:5000/api/banners", formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
@@ -39,7 +37,7 @@ const AdminBanners = () => {
   const deleteBanner = async (id) => {
     if (!window.confirm("Xóa banner này?")) return;
 
-    await axios.delete(`${API_URL}/api/banners/${id}`, {
+    await axios.delete(`http://localhost:5000/api/banners/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -67,7 +65,7 @@ const AdminBanners = () => {
       <div className="banner-list">
         {banners.map((b) => (
           <div key={b._id} className="banner-item">
-            <img src={`${API_URL}${b.image}`} alt="banner" />
+            <img src={`http://localhost:5000${b.image}`} alt="banner" />
             <button onClick={() => deleteBanner(b._id)}>🗑</button>
           </div>
         ))}

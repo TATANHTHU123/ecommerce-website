@@ -11,7 +11,9 @@ export default function Banner() {
     axios
       .get(`${API_URL}/api/banners`)
       .then(res => setBanners(res.data))
-      .catch(console.log);
+      .catch(err => {
+        console.error("Banner API error:", err);
+      });
   }, []);
 
   useEffect(() => {
@@ -31,11 +33,13 @@ export default function Banner() {
           key={b._id}
           className={`vip-banner-slide ${i === index ? "active" : ""}`}
         >
-          {/* ✅ FIX URL ẢNH */}
           <img
-            src={`${API_URL}${b.image}`}
+            src={`${API_URL}/${b.image}`}
             className="vip-banner-bg"
-            alt="banner"
+            alt=""
+            onError={(e) => {
+              e.currentTarget.style.display = "none";
+            }}
           />
 
           <div className="vip-overlay" />
