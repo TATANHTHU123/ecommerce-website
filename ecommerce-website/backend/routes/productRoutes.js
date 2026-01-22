@@ -1,9 +1,9 @@
-const express = require("express");
-const Product = require("../models/Product");
-const { protect, admin } = require("../middleware/auth");   // ⭐ THÊM BẢO VỆ
-const multer = require("multer");  // ⭐ THÊM MULTER
-const fs = require("fs");
-const path = require("path");
+import express from "express";
+import Product from "../models/Product.js";
+import { protect, admin } from "../middleware/auth.js";
+import multer from "multer";
+import fs from "fs";
+import path from "path";
 
 const router = express.Router();
 
@@ -14,9 +14,8 @@ const storage = multer.diskStorage({
   },
   filename(req, file, cb) {
     cb(null, file.originalname); // ✅ giữ nguyên tên file
-  }
+  },
 });
-
 
 const upload = multer({ storage });
 
@@ -29,8 +28,8 @@ router.post("/", protect, admin, upload.single("image"), async (req, res) => {
       name: req.body.name,
       price: req.body.price,
       category: req.body.category,
-      description: req.body.description, // ⭐ BẮT BUỘC
-      image: req.file ? `/uploads/${req.file.filename}` : req.body.image
+      description: req.body.description,
+      image: req.file ? `/uploads/${req.file.filename}` : req.body.image,
     });
 
     const created = await newProduct.save();
@@ -69,11 +68,9 @@ router.put("/:id", protect, admin, upload.single("image"), async (req, res) => {
     name: req.body.name,
     price: req.body.price,
     category: req.body.category,
-    description: req.body.description, // ⭐ BẮT BUỘC
+    description: req.body.description,
   };
 
-
-  // Nếu người dùng upload ảnh mới → đổi ảnh
   if (req.file) {
     updateData.image = `/uploads/${req.file.filename}`;
   }
@@ -95,4 +92,4 @@ router.delete("/:id", protect, admin, async (req, res) => {
   res.json({ message: "Deleted" });
 });
 
-module.exports = router;
+export default router;
